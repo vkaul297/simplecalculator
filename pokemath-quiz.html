@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéMath Quiz - Train Your Math Skills!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #ffcb05;
+            text-shadow: 3px 3px 0px #3d7dca, 6px 6px 0px #003a70;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .start-screen, .quiz-screen, .results-screen {
+            display: none;
+        }
+
+        .start-screen.active, .quiz-screen.active, .results-screen.active {
+            display: block;
+        }
+
+        .btn {
+            background: #ffcb05;
+            color: #003a70;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn-large {
+            font-size: 1.5em;
+            padding: 20px 40px;
+        }
+
+        .progress-bar {
+            background: #f0f0f0;
+            height: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .question-box {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            min-height: 150px;
+        }
+
+        .question-text {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5em;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #ffcb05;
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 40px;
+        }
+
+        .correct {
+            color: #4caf50;
+        }
+
+        .incorrect {
+            color: #f44336;
+        }
+
+        .calculator-toggle {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .calculator-toggle button {
+            background: #85d084;
+            color: white;
+            font-size: 0.9em;
+            padding: 10px 20px;
+        }
+
+        .calculator-container {
+            display: none;
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .calculator-container.active {
+            display: block;
+        }
+
+        .calc-display {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.5em;
+            text-align: right;
+            margin-bottom: 15px;
+            min-height: 50px;
+        }
+
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .calc-btn {
+            padding: 15px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #e0e0e0;
+            font-weight: bold;
+        }
+
+        .calc-btn:hover {
+            background: #d0d0d0;
+        }
+
+        .calc-btn.operator {
+            background: #ffcb05;
+            color: #003a70;
+        }
+
+        .calc-btn.equals {
+            background: #4caf50;
+            color: white;
+            grid-column: span 2;
+        }
+
+        .calc-btn.clear {
+            background: #f44336;
+            color: white;
+            grid-column: span 2;
+        }
+
+        .pokemon-card {
+            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+            border: 5px solid #ffcb05;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .pokemon-card.legendary {
+            border-color: #ff6b6b;
+            background: linear-gradient(135deg, #fffacd 0%, #ffd700 100%);
+        }
+
+        .pokemon-card.rare {
+            border-color: #4ecdc4;
+            background: linear-gradient(135deg, #e0f7ff 0%, #a7ecf9 100%);
+        }
+
+        .pokemon-card.uncommon {
+            border-color: #95e1d3;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .pokemon-emoji {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .pokemon-name {
+            font-size: 2em;
+            font-weight: bold;
+            color: #003a70;
+            margin-bottom: 10px;
+        }
+
+        .score-display {
+            font-size: 1.5em;
+            color: #666;
+            margin: 20px 0;
+        }
+
+        .grade-message {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .grade-try-again { color: #f44336; }
+        .grade-better { color: #ff9800; }
+        .grade-great { color: #4caf50; }
+        .grade-excellent { color: #9c27b0; }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3d7dca;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .celebrating {
+            animation: celebrate 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ PokéMath Quiz ⚡</h1>
+            <p>Train Your Math Skills Like a True Pokémon Trainer!</p>
+        </div>
+
+        <!-- Start Screen -->
+        <div class="start-screen active">
+            <div style="text-align: center; padding: 40px 20px;">
+                <div style="font-size: 4em; margin-bottom: 20px;">🎮</div>
+                <h2 style="color: #3d7dca; margin-bottom: 20px;">Welcome, Young Trainer!</h2>
+                <p style="font-size: 1.2em; color: #666; margin-bottom: 30px;">
+                    Professor Oak needs your help! Complete 10 math challenges to prove your skills!<br>
+                    Choose your difficulty level:
+                </p>
+                <div style="margin-bottom: 30px;">
+                    <label style="display: block; margin-bottom: 15px;">
+                        <input type="radio" name="difficulty" value="easy" checked style="margin-right: 10px;">
+                        <span style="font-size: 1.2em;">⭐ First Grade (Easy) - Numbers 0-20</span>
+                    </label>
+                    <label style="display: block;">
+                        <input type="radio" name="difficulty" value="medium" style="margin-right: 10px;">
+                        <span style="font-size: 1.2em;">⭐⭐ Second Grade (Medium) - Numbers 0-50</span>
+                    </label>
+                </div>
+                <button class="btn btn-large" onclick="startQuiz()">🚀 Start Your Adventure!</button>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div class="quiz-screen">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar">Question 1 of 10</div>
+            </div>
+
+            <div class="question-box">
+                <div class="question-text" id="questionText">Loading...</div>
+                <input type="number" class="answer-input" id="answerInput" placeholder="Type your answer here">
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div style="text-align: center; margin-bottom: 20px;">
+                <button class="btn" id="submitBtn" onclick="checkAnswer()">✨ Submit Answer</button>
+            </div>
+
+            <div class="calculator-toggle">
+                <button class="btn" onclick="toggleCalculator()">🔢 Show/Hide Calculator</button>
+                <p style="color: #999; font-size: 0.9em; margin-top: 10px;">
+                    (Try to solve without it first!)
+                </p>
+            </div>
+
+            <div class="calculator-container" id="calculatorContainer">
+                <div class="calc-display" id="calcDisplay">0</div>
+                <div class="calc-buttons">
+                    <button class="calc-btn" onclick="calcAppend('7')">7</button>
+                    <button class="calc-btn" onclick="calcAppend('8')">8</button>
+                    <button class="calc-btn" onclick="calcAppend('9')">9</button>
+                    <button class="calc-btn operator" onclick="calcAppend('+')">+</button>
+                    <button class="calc-btn" onclick="calcAppend('4')">4</button>
+                    <button class="calc-btn" onclick="calcAppend('5')">5</button>
+                    <button class="calc-btn" onclick="calcAppend('6')">6</button>
+                    <button class="calc-btn operator" onclick="calcAppend('-')">-</button>
+                    <button class="calc-btn" onclick="calcAppend('1')">1</button>
+                    <button class="calc-btn" onclick="calcAppend('2')">2</button>
+                    <button class="calc-btn" onclick="calcAppend('3')">3</button>
+                    <button class="calc-btn operator" onclick="calcAppend('*')">×</button>
+                    <button class="calc-btn" onclick="calcAppend('0')">0</button>
+                    <button class="calc-btn" onclick="calcAppend('.')">.</button>
+                    <button class="calc-btn operator" onclick="calcAppend('/')">÷</button>
+                    <button class="calc-btn equals" onclick="calcCalculate()">=</button>
+                    <button class="calc-btn clear" onclick="calcClear()">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen">
+            <div style="text-align: center; padding: 20px;">
+                <h2 style="color: #3d7dca; margin-bottom: 20px;">🏆 Quiz Complete! 🏆</h2>
+
+                <div class="grade-message" id="gradeMessage"></div>
+                <div class="score-display" id="scoreDisplay"></div>
+
+                <div class="pokemon-card" id="pokemonCard">
+                    <div class="pokemon-emoji" id="pokemonEmoji"></div>
+                    <div class="pokemon-name" id="pokemonName"></div>
+                    <p id="pokemonMessage"></p>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-number" id="correctCount">0</div>
+                        <div class="stat-label">✅ Correct</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="incorrectCount">0</div>
+                        <div class="stat-label">❌ Incorrect</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="percentageScore">0%</div>
+                        <div class="stat-label">📊 Score</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="calcUsed">0</div>
+                        <div class="stat-label">🔢 Calculator Used</div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn" onclick="restartQuiz()">🔄 Try Again</button>
+                    <button class="btn" onclick="location.reload()">🏠 Main Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Question Bank - 100 questions for 1st and 2nd graders
+        const questionBank = {
+            easy: [ // First Grade Level (0-20)
+                {q: "5 + 3", a: 8}, {q: "10 - 4", a: 6}, {q: "7 + 2", a: 9}, {q: "15 - 5", a: 10},
+                {q: "8 + 8", a: 16}, {q: "12 - 3", a: 9}, {q: "6 + 7", a: 13}, {q: "20 - 10", a: 10},
+                {q: "9 + 5", a: 14}, {q: "14 - 6", a: 8}, {q: "4 + 4", a: 8}, {q: "11 - 2", a: 9},
+                {q: "7 + 8", a: 15}, {q: "18 - 9", a: 9}, {q: "10 + 10", a: 20}, {q: "16 - 7", a: 9},
+                {q: "3 + 6", a: 9}, {q: "13 - 4", a: 9}, {q: "8 + 9", a: 17}, {q: "19 - 8", a: 11},
+                {q: "2 + 2", a: 4}, {q: "10 - 5", a: 5}, {q: "6 + 6", a: 12}, {q: "20 - 15", a: 5},
+                {q: "5 + 5", a: 10}, {q: "12 - 7", a: 5}, {q: "9 + 4", a: 13}, {q: "17 - 8", a: 9},
+                {q: "1 + 9", a: 10}, {q: "11 - 6", a: 5}, {q: "4 + 8", a: 12}, {q: "15 - 9", a: 6},
+                {q: "7 + 7", a: 14}, {q: "14 - 5", a: 9}, {q: "3 + 8", a: 11}, {q: "13 - 7", a: 6},
+                {q: "10 + 5", a: 15}, {q: "18 - 10", a: 8}, {q: "2 + 7", a: 9}, {q: "16 - 9", a: 7},
+                {q: "6 + 9", a: 15}, {q: "19 - 11", a: 8}, {q: "8 + 5", a: 13}, {q: "20 - 12", a: 8},
+                {q: "4 + 7", a: 11}, {q: "17 - 9", a: 8}, {q: "9 + 9", a: 18}, {q: "15 - 8", a: 7},
+                {q: "3 + 5", a: 8}, {q: "12 - 8", a: 4}
+            ],
+            medium: [ // Second Grade Level (0-50, includes some multiplication)
+                {q: "15 + 12", a: 27}, {q: "25 - 13", a: 12}, {q: "18 + 17", a: 35}, {q: "30 - 18", a: 12},
+                {q: "22 + 19", a: 41}, {q: "35 - 16", a: 19}, {q: "14 + 28", a: 42}, {q: "40 - 22", a: 18},
+                {q: "27 + 15", a: 42}, {q: "38 - 19", a: 19}, {q: "16 + 24", a: 40}, {q: "45 - 27", a: 18},
+                {q: "5 × 2", a: 10}, {q: "3 × 5", a: 15}, {q: "4 × 2", a: 8}, {q: "2 × 9", a: 18},
+                {q: "10 × 2", a: 20}, {q: "5 × 4", a: 20}, {q: "3 × 3", a: 9}, {q: "2 × 7", a: 14},
+                {q: "20 + 15", a: 35}, {q: "50 - 25", a: 25}, {q: "13 + 29", a: 42}, {q: "32 - 14", a: 18},
+                {q: "11 + 19", a: 30}, {q: "28 - 15", a: 13}, {q: "24 + 18", a: 42}, {q: "41 - 23", a: 18},
+                {q: "19 + 22", a: 41}, {q: "37 - 18", a: 19}, {q: "15 + 16", a: 31}, {q: "44 - 26", a: 18},
+                {q: "5 × 3", a: 15}, {q: "2 × 10", a: 20}, {q: "4 × 5", a: 20}, {q: "3 × 6", a: 18},
+                {q: "23 + 24", a: 47}, {q: "48 - 29", a: 19}, {q: "17 + 25", a: 42}, {q: "36 - 17", a: 19},
+                {q: "12 + 18", a: 30}, {q: "29 - 11", a: 18}, {q: "21 + 21", a: 42}, {q: "43 - 25", a: 18},
+                {q: "10 × 3", a: 30}, {q: "5 × 5", a: 25}, {q: "2 × 8", a: 16}, {q: "4 × 4", a: 16},
+                {q: "26 + 16", a: 42}, {q: "39 - 21", a: 18}
+            ]
+        };
+
+        // Game State
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+        let calculatorUsedCount = 0;
+        let difficulty = 'easy';
+        let calcDisplay = '0';
+
+        // Start Quiz
+        function startQuiz() {
+            difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+
+            // Select 10 random questions
+            const pool = questionBank[difficulty];
+            currentQuestions = [];
+            const used = new Set();
+
+            while (currentQuestions.length < 10) {
+                const randomIndex = Math.floor(Math.random() * pool.length);
+                if (!used.has(randomIndex)) {
+                    used.add(randomIndex);
+                    currentQuestions.push({...pool[randomIndex]});
+                }
+            }
+
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+            incorrectAnswers = 0;
+            calculatorUsedCount = 0;
+
+            document.querySelector('.start-screen').classList.remove('active');
+            document.querySelector('.quiz-screen').classList.add('active');
+
+            showQuestion();
+        }
+
+        // Show Current Question
+        function showQuestion() {
+            if (currentQuestionIndex >= currentQuestions.length) {
+                showResults();
+                return;
+            }
+
+            const question = currentQuestions[currentQuestionIndex];
+            document.getElementById('questionText').textContent = question.q + ' = ?';
+            document.getElementById('answerInput').value = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('answerInput').focus();
+
+            // Update progress
+            const progress = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = progress + '%';
+            progressBar.textContent = `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
+        }
+
+        // Check Answer
+        function checkAnswer() {
+            const userAnswer = parseInt(document.getElementById('answerInput').value);
+            const correctAnswer = currentQuestions[currentQuestionIndex].a;
+            const feedback = document.getElementById('feedback');
+
+            if (isNaN(userAnswer)) {
+                feedback.textContent = '⚠️ Please enter a number!';
+                feedback.className = 'feedback';
+                return;
+            }
+
+            if (userAnswer === correctAnswer) {
+                correctAnswers++;
+                feedback.textContent = '✨ Correct! Your Pokémon grew stronger!';
+                feedback.className = 'feedback correct celebrating';
+            } else {
+                incorrectAnswers++;
+                feedback.textContent = `💥 Not quite! The answer was ${correctAnswer}. Keep training!`;
+                feedback.className = 'feedback incorrect';
+            }
+
+            // Disable input and button
+            document.getElementById('answerInput').disabled = true;
+            document.getElementById('submitBtn').textContent = '➡️ Next Question';
+            document.getElementById('submitBtn').onclick = nextQuestion;
+        }
+
+        // Next Question
+        function nextQuestion() {
+            document.getElementById('answerInput').disabled = false;
+            document.getElementById('submitBtn').textContent = '✨ Submit Answer';
+            document.getElementById('submitBtn').onclick = checkAnswer;
+
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        // Show Results
+        function showResults() {
+            const totalQuestions = currentQuestions.length;
+            const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+
+            document.querySelector('.quiz-screen').classList.remove('active');
+            document.querySelector('.results-screen').classList.add('active');
+
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('incorrectCount').textContent = incorrectAnswers;
+            document.getElementById('percentageScore').textContent = percentage + '%';
+            document.getElementById('calcUsed').textContent = calculatorUsedCount;
+            document.getElementById('scoreDisplay').textContent = `You got ${correctAnswers} out of ${totalQuestions} correct!`;
+
+            // Determine grade and Pokemon
+            let grade, gradeClass, pokemon, pokemonEmoji, message, cardClass;
+
+            if (percentage < 60) {
+                grade = "Try Again!";
+                gradeClass = "grade-try-again";
+                pokemon = "Magikarp";
+                pokemonEmoji = "🐟";
+                message = "Keep practicing! Even Magikarp can evolve into Gyarados!";
+                cardClass = "";
+            } else if (percentage < 76) {
+                grade = "You Can Do Better!";
+                gradeClass = "grade-better";
+                pokemon = "Psyduck";
+                pokemonEmoji = "🦆";
+                message = "Good effort! With more training, you'll be amazing!";
+                cardClass = "uncommon";
+            } else if (percentage < 91) {
+                grade = "Great Job!";
+                gradeClass = "grade-great";
+                pokemon = percentage < 85 ? "Pikachu" : "Charmander";
+                pokemonEmoji = percentage < 85 ? "⚡" : "🔥";
+                message = "Excellent work! You're becoming a true Pokémon Trainer!";
+                cardClass = "rare";
+            } else {
+                grade = "Excellent!";
+                gradeClass = "grade-excellent";
+                const legendaries = [
+                    {name: "Mewtwo", emoji: "🧠"},
+                    {name: "Charizard", emoji: "🔥"},
+                    {name: "Dragonite", emoji: "🐉"},
+                    {name: "Lugia", emoji: "🦅"}
+                ];
+                const legendary = legendaries[Math.floor(Math.random() * legendaries.length)];
+                pokemon = legendary.name;
+                pokemonEmoji = legendary.emoji;
+                message = "🏆 AMAZING! You're a Pokémon Master! 🏆";
+                cardClass = "legendary";
+            }
+
+            document.getElementById('gradeMessage').textContent = grade;
+            document.getElementById('gradeMessage').className = `grade-message ${gradeClass}`;
+            document.getElementById('pokemonName').textContent = pokemon;
+            document.getElementById('pokemonEmoji').textContent = pokemonEmoji;
+            document.getElementById('pokemonMessage').textContent = message;
+            document.getElementById('pokemonCard').className = `pokemon-card ${cardClass}`;
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            document.querySelector('.results-screen').classList.remove('active');
+            document.querySelector('.start-screen').classList.add('active');
+        }
+
+        // Calculator Functions
+        function toggleCalculator() {
+            const calc = document.getElementById('calculatorContainer');
+            calc.classList.toggle('active');
+            if (calc.classList.contains('active')) {
+                calculatorUsedCount++;
+            }
+        }
+
+        function calcAppend(value) {
+            if (calcDisplay === '0' || calcDisplay === 'Error') {
+                calcDisplay = value;
+            } else {
+                calcDisplay += value;
+            }
+            document.getElementById('calcDisplay').textContent = calcDisplay;
+        }
+
+        function calcCalculate() {
+            try {
+                const result = eval(calcDisplay);
+                calcDisplay = result.toString();
+                document.getElementById('calcDisplay').textContent = calcDisplay;
+            } catch (error) {
+                calcDisplay = 'Error';
+                document.getElementById('calcDisplay').textContent = calcDisplay;
+            }
+        }
+
+        function calcClear() {
+            calcDisplay = '0';
+            document.getElementById('calcDisplay').textContent = calcDisplay;
+        }
+
+        // Enter key support
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && document.querySelector('.quiz-screen').classList.contains('active')) {
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
