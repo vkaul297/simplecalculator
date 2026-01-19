@@ -1,21 +1,38 @@
 # ⚡ PokéMath - Gotta Calculate 'Em All! ⚡
 
-A Pokemon-themed math learning platform with an interactive quiz, calculator, and Python CLI tools. Perfect for first and second graders to practice math while catching Pokemon!
+A Pokemon-themed math learning platform with an interactive quiz, calculator, and Python CLI tools. Perfect for grades 1-4 to practice math while catching Pokemon!
 
 ## 🎮 Three Versions Available
 
-### 1. 🏆 PokéMath Quiz (pokemath-quiz.html) ⭐ MAIN FEATURE
-**Interactive math quiz for young trainers!** Test your skills with 10 random questions and earn Pokemon cards!
-- **100 question bank** covering first and second grade math
-- Choose difficulty: First Grade (0-20) or Second Grade (0-50)
-- Earn Pokemon cards based on score:
-  - 🐟 **Try Again** (0-59%): Magikarp
-  - 🦆 **You Can Do Better** (60-75%): Psyduck, Oddish
-  - ⚡ **Great Job** (76-90%): Pikachu, Charmander, Squirtle
-  - 🏆 **Excellent** (91-100%): Mewtwo, Charizard, Dragonite, Lugia!
-- Optional calculator (but try without it first!)
-- Track progress with stats
-- **No server needed** - just open in browser!
+### 1. 🏆 PokéMath Quiz (pokemath-quiz.html) ⭐ MAIN FEATURE - FULLY UPGRADED!
+**Advanced interactive math quiz with modern design!** Test your skills and earn exclusive Pokemon cards!
+
+**🆕 NEW FEATURES:**
+- **500+ question bank** with Russian School of Math style problems
+- **4 grade levels**: Grade 1-4 (adaptive difficulty)
+- **Flexible quiz length**: 5, 10, 20, or 50 questions
+- **Word problems**: Multi-step reasoning challenges
+- **Confetti celebrations** for high scores!
+- **Realistic Pokemon cards** with HP, Type, and holographic effects
+- **Modern gradient design** with smooth animations
+
+**Grade Levels:**
+- ⭐ **Grade 1**: Numbers 0-20, basic addition & subtraction
+- ⭐⭐ **Grade 2**: Numbers 0-50, multiplication tables
+- ⭐⭐⭐ **Grade 3**: Numbers 0-100, division, multi-step problems
+- ⭐⭐⭐⭐ **Grade 4**: Advanced math, decimals, complex word problems
+
+**Pokemon Card Rewards:**
+- 🐟 **Keep Training!** (0-59%): Magikarp (Common)
+- 🦆 **Good Effort!** (60-75%): Psyduck, Oddish (Uncommon)
+- ⚡ **Excellent Work!** (76-90%): Pikachu, Charmander, Squirtle, Bulbasaur (Rare)
+- 🏆 **LEGENDARY!** (91-100%): Mewtwo, Charizard, Dragonite, Lugia, Articuno, Moltres + Confetti!
+
+**Features:**
+- Optional built-in calculator
+- Real-time progress tracking
+- Detailed performance stats
+- **No server needed** - pure HTML/CSS/JS!
 
 ### 2. HTML Calculator (pokecalc.html)
 Beautiful, interactive web calculator that runs entirely in your browser.
@@ -58,21 +75,25 @@ Command-line calculator with Pokemon-themed interface and battle log system!
 Simply **double-click `pokemath-quiz.html`** or open it in any web browser!
 
 **How to Play:**
-1. Choose your difficulty level (First or Second Grade)
-2. Answer 10 random math questions
-3. Use the calculator if needed (optional)
-4. Get your score and earn a Pokemon card!
-5. Try again to improve your score and catch better Pokemon!
+1. Choose your grade level (Grades 1-4)
+2. Select quiz length (5, 10, 20, or 50 questions)
+3. Answer questions (mix of computational and word problems)
+4. Use the calculator if needed (optional - not encouraged!)
+5. Get your score and earn a Pokemon card!
+6. Celebrate with confetti if you score high!
+7. Try again to improve and catch legendary Pokemon!
 
-**Question Types:**
-- **First Grade**: Addition and subtraction (0-20)
-- **Second Grade**: Addition, subtraction (0-50), and basic multiplication (2s, 5s, 10s)
+**Question Types by Grade:**
+- **Grade 1**: Addition and subtraction (0-20), simple word problems
+- **Grade 2**: Addition, subtraction (0-50), multiplication (2s-10s), word problems
+- **Grade 3**: Larger numbers (0-100), division, multi-step reasoning problems
+- **Grade 4**: Advanced operations (100-1000+), decimals, complex Russian School of Math style problems
 
-**Pokemon Rewards:**
-- Score 91-100%: Legendary Pokemon! (Mewtwo, Charizard, Dragonite, Lugia)
-- Score 76-90%: Rare Pokemon! (Pikachu, Charmander, Squirtle)
-- Score 60-75%: Uncommon Pokemon (Psyduck, Oddish)
-- Below 60%: Keep trying! (Magikarp - but remember, it evolves!)
+**Pokemon Card Rewards:**
+- Score 91-100%: **LEGENDARY** Pokemon with confetti! (Mewtwo, Charizard, Dragonite, Lugia, Articuno, Moltres)
+- Score 76-90%: **RARE** Pokemon (Pikachu, Charmander, Squirtle, Bulbasaur)
+- Score 60-75%: **UNCOMMON** Pokemon (Psyduck, Oddish)
+- Below 60%: **COMMON** Pokemon (Magikarp - but remember, it evolves!)
 
 ### Running the HTML Calculator
 Simply double-click `pokecalc.html` or open it in any web browser!
@@ -172,18 +193,35 @@ Just open `pokecalc.html` in your browser and:
 
 ## 🎨 Feature Details
 
-### PokéMath Quiz Features
-- **100 Question Bank**: 50 questions each for first and second grade levels
-- **Random Selection**: Get 10 different questions each time you play
-- **Two Difficulty Levels**:
-  - ⭐ First Grade: Addition/subtraction with numbers 0-20
-  - ⭐⭐ Second Grade: Addition/subtraction 0-50, plus basic multiplication
-- **Pokemon Card Rewards**: Earn better Pokemon for higher scores
-- **Progress Tracking**: See your progress bar as you answer questions
-- **Built-in Calculator**: Available if needed (but try without it first!)
-- **Detailed Stats**: View correct/incorrect answers and calculator usage
-- **Try Again**: Retake the quiz to improve your score
-- **No Server Required**: Pure HTML, CSS, and JavaScript
+### PokéMath Quiz Features - UPGRADED!
+- **500+ Question Bank**: Comprehensive coverage across all four grade levels
+- **4 Grade Levels**:
+  - ⭐ **Grade 1**: Numbers 0-20, basic operations + word problems
+  - ⭐⭐ **Grade 2**: Numbers 0-50, multiplication tables + word problems
+  - ⭐⭐⭐ **Grade 3**: Numbers 0-100, division, multi-step problems
+  - ⭐⭐⭐⭐ **Grade 4**: Large numbers, decimals, Russian School of Math style problems
+- **Flexible Quiz Length**: Choose 5, 10, 20, or 50 questions
+- **Random Selection**: Different questions every time you play
+- **Word Problems**: Russian School of Math style multi-step reasoning
+- **Realistic Pokemon Cards**:
+  - HP values based on rarity
+  - Pokemon type labels (Fire, Water, Electric, etc.)
+  - Holographic shimmer effect
+  - Gradient backgrounds matching card rarity
+- **Confetti Celebration**: Animated confetti for scores 76% and above
+- **Modern UI**:
+  - Gradient backgrounds with subtle animations
+  - Smooth transitions and hover effects
+  - Responsive design for all devices
+  - Professional typography and spacing
+- **Progress Tracking**: Animated progress bar showing current question
+- **Built-in Calculator**: Optional helper (usage tracked in stats)
+- **Detailed Performance Stats**:
+  - Correct/incorrect count
+  - Percentage score
+  - Calculator usage tracking
+- **Try Again**: Retake with new random questions
+- **No Server Required**: Pure HTML/CSS/JavaScript (70KB total)
 
 ### HTML Calculator Features
 
@@ -211,21 +249,27 @@ Just open `pokecalc.html` in your browser and:
 Created with love for young Pokemon trainers learning math!
 
 **Perfect for:**
-- First and second grade students
-- Parents teaching math at home
-- Teachers looking for fun math practice tools
-- Anyone who loves Pokemon and math!
+- **Grades 1-4 students** at all skill levels
+- **Parents** teaching math at home
+- **Teachers** looking for engaging practice tools
+- **Homeschoolers** needing flexible assessments
+- **Math tutors** wanting gamified practice
+- **Anyone who loves Pokemon and math!**
 
 *"I want to be the very best, like no math master ever was!"*
 
 ## 🎯 Educational Value
 
 The PokéMath Quiz helps children:
-- Practice addition, subtraction, and basic multiplication
-- Build confidence with immediate feedback
-- Stay motivated with Pokemon rewards
-- Learn without pressure (optional calculator support)
-- Track their progress and improvement
+- **Master core math skills** from basic arithmetic to advanced operations
+- **Develop problem-solving** with Russian School of Math style word problems
+- **Build confidence** with immediate, encouraging feedback
+- **Stay motivated** with collectible Pokemon card rewards and celebrations
+- **Learn at their own pace** with flexible quiz lengths (5-50 questions)
+- **Track progress** with detailed statistics
+- **Practice without pressure** with optional calculator support
+- **Improve critical thinking** through multi-step reasoning challenges
+- **Enjoy learning** with a modern, engaging interface
 
 ## 📄 License
 MIT License
