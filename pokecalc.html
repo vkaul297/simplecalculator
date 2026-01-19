@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéCalc - Gotta Calculate 'Em All!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #ffcb05;
+            text-shadow: 3px 3px 0px #3d7dca, 6px 6px 0px #003a70;
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            min-height: 80px;
+            font-size: 2em;
+            text-align: right;
+            word-wrap: break-word;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-number {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-operator {
+            background: #ffcb05;
+            color: #003a70;
+        }
+
+        .btn-equals {
+            background: #ee1515;
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-clear {
+            background: #3d7dca;
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-special {
+            background: #85d084;
+            color: white;
+            font-size: 1em;
+        }
+
+        .battle-log {
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .battle-log h3 {
+            color: #3d7dca;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .battle-log-item {
+            background: white;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border-left: 4px solid #ffcb05;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .battle-log-empty {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+        }
+
+        .clear-log-btn {
+            background: #ee1515;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .clear-log-btn:hover {
+            background: #cc0000;
+        }
+
+        .pokemon-message {
+            text-align: center;
+            color: #3d7dca;
+            font-size: 1.1em;
+            margin-top: 15px;
+            min-height: 30px;
+            font-weight: bold;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .error {
+            animation: shake 0.3s;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ PokéCalc ⚡</h1>
+            <p>Gotta Calculate 'Em All!</p>
+        </div>
+
+        <div class="display" id="display">0</div>
+        <div class="pokemon-message" id="message">Choose your math move!</div>
+
+        <div class="button-grid">
+            <button class="btn btn-clear" onclick="clearDisplay()">🏥 Clear (AC)</button>
+            <button class="btn btn-operator" onclick="appendOperator('/')">💧 ÷</button>
+            <button class="btn btn-operator" onclick="appendOperator('*')">🧠 ×</button>
+
+            <button class="btn btn-number" onclick="appendNumber('7')">7</button>
+            <button class="btn btn-number" onclick="appendNumber('8')">8</button>
+            <button class="btn btn-number" onclick="appendNumber('9')">9</button>
+            <button class="btn btn-operator" onclick="appendOperator('-')">🔥 -</button>
+
+            <button class="btn btn-number" onclick="appendNumber('4')">4</button>
+            <button class="btn btn-number" onclick="appendNumber('5')">5</button>
+            <button class="btn btn-number" onclick="appendNumber('6')">6</button>
+            <button class="btn btn-operator" onclick="appendOperator('+')">⚡ +</button>
+
+            <button class="btn btn-number" onclick="appendNumber('1')">1</button>
+            <button class="btn btn-number" onclick="appendNumber('2')">2</button>
+            <button class="btn btn-number" onclick="appendNumber('3')">3</button>
+            <button class="btn btn-special" onclick="calculatePower()">🔥 x²</button>
+
+            <button class="btn btn-number" onclick="appendNumber('0')">0</button>
+            <button class="btn btn-number" onclick="appendNumber('.')">.</button>
+            <button class="btn btn-special" onclick="calculateSqrt()">⭐ √</button>
+            <button class="btn btn-equals" onclick="calculate()">✨ = Battle!</button>
+        </div>
+
+        <div class="battle-log">
+            <h3>
+                📖 Trainer Journal
+                <button class="clear-log-btn" onclick="clearBattleLog()">🏥 Clear Log</button>
+            </h3>
+            <div id="battleLog">
+                <div class="battle-log-empty">No battles yet, Trainer! Start calculating!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDisplay = '0';
+        let battleLog = [];
+        let lastResult = null;
+
+        const pokemonMessages = {
+            add: "⚡ Pikachu used Thunder Shock!",
+            subtract: "🔥 Charmander used Ember!",
+            multiply: "🧠 Mewtwo used Psychic!",
+            divide: "💧 Squirtle used Water Gun!",
+            power: "🔥 Charizard used Fire Blast!",
+            sqrt: "⭐ Eevee used Swift!",
+            success: "✨ It's super effective!",
+            error: "💥 Attack failed!",
+            clear: "🏥 Nurse Joy healed your calculator!"
+        };
+
+        function updateDisplay() {
+            document.getElementById('display').textContent = currentDisplay;
+        }
+
+        function showMessage(message, duration = 3000) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = message;
+            if (duration > 0) {
+                setTimeout(() => {
+                    messageEl.textContent = "Choose your math move!";
+                }, duration);
+            }
+        }
+
+        function appendNumber(num) {
+            if (currentDisplay === '0' || currentDisplay === 'Error') {
+                currentDisplay = num;
+            } else {
+                currentDisplay += num;
+            }
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            const lastChar = currentDisplay.slice(-1);
+            if (['+', '-', '*', '/'].includes(lastChar)) {
+                currentDisplay = currentDisplay.slice(0, -1) + op;
+            } else {
+                currentDisplay += op;
+            }
+
+            const opMessages = {
+                '+': pokemonMessages.add,
+                '-': pokemonMessages.subtract,
+                '*': pokemonMessages.multiply,
+                '/': pokemonMessages.divide
+            };
+            showMessage(opMessages[op], 2000);
+            updateDisplay();
+        }
+
+        function calculate() {
+            try {
+                const expression = currentDisplay;
+                const result = eval(currentDisplay);
+
+                if (!isFinite(result)) {
+                    throw new Error("Cannot divide by zero! It's super ineffective!");
+                }
+
+                currentDisplay = result.toString();
+                updateDisplay();
+
+                addToBattleLog(expression + ' = ' + result);
+                showMessage(pokemonMessages.success);
+                lastResult = result;
+            } catch (error) {
+                currentDisplay = 'Error';
+                updateDisplay();
+                showMessage(pokemonMessages.error + " " + (error.message || "Invalid calculation!"));
+                document.getElementById('display').classList.add('error');
+                setTimeout(() => {
+                    document.getElementById('display').classList.remove('error');
+                    currentDisplay = '0';
+                    updateDisplay();
+                }, 1500);
+            }
+        }
+
+        function calculatePower() {
+            try {
+                const num = parseFloat(currentDisplay);
+                if (isNaN(num)) throw new Error("Invalid number");
+
+                const result = Math.pow(num, 2);
+                const expression = num + '²';
+                currentDisplay = result.toString();
+                updateDisplay();
+
+                addToBattleLog(expression + ' = ' + result);
+                showMessage(pokemonMessages.power + " 🔥 CRITICAL HIT!");
+            } catch (error) {
+                showMessage(pokemonMessages.error + " Invalid input!");
+            }
+        }
+
+        function calculateSqrt() {
+            try {
+                const num = parseFloat(currentDisplay);
+                if (isNaN(num)) throw new Error("Invalid number");
+                if (num < 0) throw new Error("Eevee can't calculate square root of negative numbers!");
+
+                const result = Math.sqrt(num);
+                const expression = '√' + num;
+                currentDisplay = result.toString();
+                updateDisplay();
+
+                addToBattleLog(expression + ' = ' + result);
+                showMessage(pokemonMessages.sqrt);
+            } catch (error) {
+                showMessage(pokemonMessages.error + " " + error.message);
+            }
+        }
+
+        function clearDisplay() {
+            currentDisplay = '0';
+            updateDisplay();
+            showMessage(pokemonMessages.clear);
+        }
+
+        function addToBattleLog(calculation) {
+            battleLog.unshift(calculation);
+            if (battleLog.length > 20) battleLog.pop(); // Keep only last 20
+            updateBattleLog();
+        }
+
+        function updateBattleLog() {
+            const logContainer = document.getElementById('battleLog');
+
+            if (battleLog.length === 0) {
+                logContainer.innerHTML = '<div class="battle-log-empty">No battles yet, Trainer! Start calculating!</div>';
+            } else {
+                logContainer.innerHTML = battleLog.map((log, index) =>
+                    `<div class="battle-log-item">Battle #${battleLog.length - index}: ${log}</div>`
+                ).join('');
+            }
+        }
+
+        function clearBattleLog() {
+            battleLog = [];
+            updateBattleLog();
+            showMessage("🏥 Nurse Joy: 'Your Trainer Journal has been refreshed!'");
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', (event) => {
+            if (event.key >= '0' && event.key <= '9') {
+                appendNumber(event.key);
+            } else if (event.key === '.') {
+                appendNumber('.');
+            } else if (['+', '-', '*', '/'].includes(event.key)) {
+                appendOperator(event.key);
+            } else if (event.key === 'Enter' || event.key === '=') {
+                calculate();
+            } else if (event.key === 'Escape' || event.key === 'c') {
+                clearDisplay();
+            }
+        });
+    </script>
+</body>
+</html>
