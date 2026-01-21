@@ -30,6 +30,40 @@
             overflow: hidden;
         }
 
+        .theme-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        .theme-selector label {
+            font-weight: 600;
+            color: #666;
+            margin-right: 10px;
+        }
+
+        .theme-selector select {
+            padding: 8px 15px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .theme-selector select:hover {
+            border-color: #667eea;
+        }
+
+        .theme-selector select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
         .container::before {
             content: '';
             position: absolute;
@@ -536,6 +570,20 @@
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
+                padding-top: 80px;
+            }
+
+            .theme-selector {
+                position: relative;
+                top: 0;
+                right: 0;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .theme-selector label {
+                display: block;
+                margin-bottom: 8px;
             }
 
             .header h1 {
@@ -556,9 +604,18 @@
     <div class="confetti-container" id="confettiContainer"></div>
 
     <div class="container">
+        <div class="theme-selector">
+            <label for="themeSelect">Choose Your Theme:</label>
+            <select id="themeSelect" onchange="changeTheme(this.value)">
+                <option value="pokemon">⚡ Pokémon</option>
+                <option value="minecraft">⛏️ Minecraft</option>
+                <option value="dogman">🦴 Dog Man</option>
+            </select>
+        </div>
+
         <div class="header">
-            <h1>⚡ PokéMath Quiz ⚡</h1>
-            <p>Master Math Skills Like a True Pokémon Champion!</p>
+            <h1 id="mainTitle">⚡ PokéMath Quiz ⚡</h1>
+            <p id="mainSubtitle">Master Math Skills Like a True Pokémon Champion!</p>
         </div>
 
         <!-- Start Screen -->
@@ -708,6 +765,281 @@
     </div>
 
     <script>
+        // Theme Configuration
+        const themes = {
+            pokemon: {
+                name: 'Pokémon',
+                title: '⚡ PokéMath Quiz ⚡',
+                subtitle: 'Master Math Skills Like a True Pokémon Champion!',
+                welcomeEmoji: '🎮',
+                welcomeTitle: 'Welcome, Young Trainer!',
+                welcomeMessage: "Professor Oak needs your help! Complete math challenges to prove your skills and earn exclusive Pokémon cards!",
+                gradeLabel: 'Choose Your Grade Level:',
+                quizCompleteTitle: '🏆 Quest Complete! 🏆',
+                colors: {
+                    primary: '#667eea',
+                    secondary: '#764ba2',
+                    accent: '#f093fb',
+                    highlight: '#ffcb05'
+                },
+                gradients: {
+                    body: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                    button: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    title: 'linear-gradient(135deg, #ffcb05 0%, #ff6b6b 50%, #4ecdc4 100%)'
+                },
+                correctMessages: [
+                    '✨ Correct! Your Pokémon grew stronger!',
+                    '🌟 Amazing! You\'re becoming a master!',
+                    '⚡ Excellent work! Keep it up!',
+                    '🎯 Perfect! You got it right!',
+                    '🏆 Outstanding! Great thinking!'
+                ],
+                rewards: {
+                    low: {
+                        grade: "Keep Training!",
+                        gradeClass: "grade-try-again",
+                        options: [
+                            {name: "Magikarp", emoji: "🐟", type: "Water Type", hp: "HP 30"}
+                        ],
+                        message: "Every champion starts somewhere! Keep practicing and you'll evolve into Gyarados!",
+                        cardClass: ""
+                    },
+                    medium: {
+                        grade: "Good Effort!",
+                        gradeClass: "grade-better",
+                        options: [
+                            {name: "Psyduck", emoji: "🦆", type: "Water Type", hp: "HP 50"},
+                            {name: "Oddish", emoji: "🌱", type: "Grass Type", hp: "HP 45"}
+                        ],
+                        message: "Great work! With more practice, you'll be unstoppable!",
+                        cardClass: "uncommon"
+                    },
+                    high: {
+                        grade: "Excellent Work!",
+                        gradeClass: "grade-great",
+                        options: [
+                            {name: "Pikachu", emoji: "⚡", type: "Electric Type", hp: "HP 60"},
+                            {name: "Charmander", emoji: "🔥", type: "Fire Type", hp: "HP 60"},
+                            {name: "Squirtle", emoji: "💧", type: "Water Type", hp: "HP 60"},
+                            {name: "Bulbasaur", emoji: "🌿", type: "Grass Type", hp: "HP 60"}
+                        ],
+                        message: "Fantastic! You're showing the skills of a true Pokémon Trainer!",
+                        cardClass: "rare"
+                    },
+                    legendary: {
+                        grade: "LEGENDARY PERFORMANCE!",
+                        gradeClass: "grade-excellent",
+                        options: [
+                            {name: "Mewtwo", emoji: "🧠", type: "Psychic Type", hp: "HP 120"},
+                            {name: "Charizard", emoji: "🔥", type: "Fire/Flying Type", hp: "HP 120"},
+                            {name: "Dragonite", emoji: "🐉", type: "Dragon Type", hp: "HP 130"},
+                            {name: "Lugia", emoji: "🦅", type: "Psychic/Flying Type", hp: "HP 140"},
+                            {name: "Articuno", emoji: "❄️", type: "Ice/Flying Type", hp: "HP 125"},
+                            {name: "Moltres", emoji: "🔥", type: "Fire/Flying Type", hp: "HP 125"}
+                        ],
+                        message: "INCREDIBLE! You've achieved Pokémon Master status! 🏆",
+                        cardClass: "legendary"
+                    }
+                }
+            },
+            minecraft: {
+                name: 'Minecraft',
+                title: '⛏️ MineMath Quest ⛏️',
+                subtitle: 'Build Your Math Skills Block by Block!',
+                welcomeEmoji: '🎮',
+                welcomeTitle: 'Welcome, Steve!',
+                welcomeMessage: "The Minecraft world needs your help! Complete math challenges to mine resources and earn epic items!",
+                gradeLabel: 'Choose Your Difficulty:',
+                quizCompleteTitle: '🏆 Achievement Unlocked! 🏆',
+                colors: {
+                    primary: '#4a7c59',
+                    secondary: '#8b5a3c',
+                    accent: '#5dade2',
+                    highlight: '#2ecc71'
+                },
+                gradients: {
+                    body: 'linear-gradient(135deg, #4a7c59 0%, #8b5a3c 50%, #5dade2 100%)',
+                    button: 'linear-gradient(135deg, #4a7c59 0%, #2ecc71 100%)',
+                    title: 'linear-gradient(135deg, #2ecc71 0%, #3498db 50%, #9b59b6 100%)'
+                },
+                correctMessages: [
+                    '⛏️ Correct! You mined some diamonds!',
+                    '✨ Amazing! Your pickaxe grew stronger!',
+                    '🔥 Excellent work! Keep mining!',
+                    '💎 Perfect! You found treasure!',
+                    '🏆 Outstanding! Epic loot!'
+                ],
+                rewards: {
+                    low: {
+                        grade: "Keep Mining!",
+                        gradeClass: "grade-try-again",
+                        options: [
+                            {name: "Wooden Pickaxe", emoji: "🪓", type: "Basic Tool", hp: "Durability 30"}
+                        ],
+                        message: "Every miner starts with wood! Keep mining to get better tools!",
+                        cardClass: ""
+                    },
+                    medium: {
+                        grade: "Good Mining!",
+                        gradeClass: "grade-better",
+                        options: [
+                            {name: "Iron Pickaxe", emoji: "⚒️", type: "Iron Tool", hp: "Durability 50"},
+                            {name: "Iron Sword", emoji: "🗡️", type: "Iron Weapon", hp: "Durability 45"}
+                        ],
+                        message: "Great work! You're making progress in your mining journey!",
+                        cardClass: "uncommon"
+                    },
+                    high: {
+                        grade: "Excellent Mining!",
+                        gradeClass: "grade-great",
+                        options: [
+                            {name: "Diamond Pickaxe", emoji: "💎", type: "Diamond Tool", hp: "Durability 60"},
+                            {name: "Diamond Sword", emoji: "⚔️", type: "Diamond Weapon", hp: "Durability 60"},
+                            {name: "Enchanted Bow", emoji: "🏹", type: "Ranged Weapon", hp: "Durability 60"},
+                            {name: "Golden Apple", emoji: "🍎", type: "Epic Food", hp: "Hearts +60"}
+                        ],
+                        message: "Fantastic! You're showing true mining mastery!",
+                        cardClass: "rare"
+                    },
+                    legendary: {
+                        grade: "LEGENDARY MINER!",
+                        gradeClass: "grade-excellent",
+                        options: [
+                            {name: "Netherite Pickaxe", emoji: "⛏️", type: "Netherite Tool", hp: "Durability 120"},
+                            {name: "Netherite Sword", emoji: "⚔️", type: "Netherite Weapon", hp: "Durability 120"},
+                            {name: "Elytra", emoji: "🪂", type: "Epic Wings", hp: "Durability 130"},
+                            {name: "Enchanted Trident", emoji: "🔱", type: "Legendary Weapon", hp: "Durability 140"},
+                            {name: "Dragon Egg", emoji: "🥚", type: "Ultra Rare Item", hp: "Priceless"},
+                            {name: "Nether Star", emoji: "⭐", type: "Boss Drop", hp: "Power 125"}
+                        ],
+                        message: "INCREDIBLE! You've become a Minecraft Legend! 🏆",
+                        cardClass: "legendary"
+                    }
+                }
+            },
+            dogman: {
+                name: 'Dog Man',
+                title: '🦴 Dog Man Math Mission 🦴',
+                subtitle: 'Paws-itively Amazing Math Adventures!',
+                welcomeEmoji: '🐕',
+                welcomeTitle: 'Welcome, Deputy Dog!',
+                welcomeMessage: "Dog Man needs your help to stop Petey the Cat's evil plans! Solve math challenges to earn awesome rewards!",
+                gradeLabel: 'Choose Your Mission Level:',
+                quizCompleteTitle: '🏆 Mission Complete! 🏆',
+                colors: {
+                    primary: '#ff6b35',
+                    secondary: '#f7931e',
+                    accent: '#4ecdc4',
+                    highlight: '#ffe66d'
+                },
+                gradients: {
+                    body: 'linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #4ecdc4 100%)',
+                    button: 'linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)',
+                    title: 'linear-gradient(135deg, #ffe66d 0%, #ff6b35 50%, #4ecdc4 100%)'
+                },
+                correctMessages: [
+                    '🦴 Correct! Dog Man found a bone!',
+                    '🌟 Paws-itively amazing work!',
+                    '⚡ Excellent! You stopped Petey!',
+                    '🎯 Perfect! Chief is proud!',
+                    '🏆 Outstanding! Super Dog Man!'
+                ],
+                rewards: {
+                    low: {
+                        grade: "Keep Training!",
+                        gradeClass: "grade-try-again",
+                        options: [
+                            {name: "Dog Biscuit", emoji: "🦴", type: "Rookie Snack", hp: "Yum 30"}
+                        ],
+                        message: "Every hero starts somewhere! Keep training and you'll be a super cop!",
+                        cardClass: ""
+                    },
+                    medium: {
+                        grade: "Good Work!",
+                        gradeClass: "grade-better",
+                        options: [
+                            {name: "Police Badge", emoji: "🎖️", type: "Officer Badge", hp: "Rank 50"},
+                            {name: "Cop Hat", emoji: "👮", type: "Police Gear", hp: "Cool 45"}
+                        ],
+                        message: "Great job! Chief is starting to notice your skills!",
+                        cardClass: "uncommon"
+                    },
+                    high: {
+                        grade: "Excellent Work!",
+                        gradeClass: "grade-great",
+                        options: [
+                            {name: "Dog Man Cape", emoji: "🦸", type: "Hero Cape", hp: "Power 60"},
+                            {name: "Super Bone", emoji: "🦴", type: "Epic Treat", hp: "Energy 60"},
+                            {name: "Chief's Medal", emoji: "🏅", type: "Honor Medal", hp: "Respect 60"},
+                            {name: "Supa Buddy", emoji: "🤖", type: "Robot Friend", hp: "Tech 60"}
+                        ],
+                        message: "Fantastic! You're showing true Dog Man heroics!",
+                        cardClass: "rare"
+                    },
+                    legendary: {
+                        grade: "LEGENDARY HERO!",
+                        gradeClass: "grade-excellent",
+                        options: [
+                            {name: "Dog Man Suit", emoji: "🦸‍♂️", type: "Ultimate Hero", hp: "Power 120"},
+                            {name: "Flip-O-Rama", emoji: "📖", type: "Special Move", hp: "Epic 120"},
+                            {name: "Li'l Petey", emoji: "😺", type: "Best Friend", hp: "Friendship 130"},
+                            {name: "80-HD", emoji: "🤖", type: "Super Robot", hp: "Tech 140"},
+                            {name: "Cat Kid", emoji: "🐱", type: "Hero Sidekick", hp: "Awesome 125"},
+                            {name: "Supa Jet", emoji: "🚀", type: "Flying Vehicle", hp: "Speed 125"}
+                        ],
+                        message: "INCREDIBLE! You're a Dog Man Super Hero! 🏆",
+                        cardClass: "legendary"
+                    }
+                }
+            }
+        };
+
+        let currentTheme = 'pokemon';
+
+        // Theme Functions
+        function changeTheme(themeName) {
+            currentTheme = themeName;
+            localStorage.setItem('selectedTheme', themeName);
+            applyTheme(themeName);
+        }
+
+        function applyTheme(themeName) {
+            const theme = themes[themeName];
+
+            // Update title and subtitle
+            document.getElementById('mainTitle').textContent = theme.title;
+            document.getElementById('mainSubtitle').textContent = theme.subtitle;
+
+            // Update colors
+            document.body.style.background = theme.gradients.body;
+            document.body.style.backgroundAttachment = 'fixed';
+
+            // Update welcome screen if visible
+            if (document.querySelector('.start-screen.active')) {
+                updateWelcomeScreen(theme);
+            }
+        }
+
+        function updateWelcomeScreen(theme) {
+            const welcomeEmoji = document.querySelector('.start-screen [style*="font-size: 5em"]');
+            const welcomeTitle = document.querySelector('.start-screen h2');
+            const welcomeMessage = document.querySelector('.start-screen p[style*="line-height: 1.8"]');
+            const gradeLabel = document.querySelector('.start-screen h3:first-of-type');
+
+            if (welcomeEmoji) welcomeEmoji.textContent = theme.welcomeEmoji;
+            if (welcomeTitle) welcomeTitle.textContent = theme.welcomeTitle;
+            if (welcomeMessage) welcomeMessage.textContent = theme.welcomeMessage;
+            if (gradeLabel) gradeLabel.textContent = theme.gradeLabel;
+        }
+
+        // Load saved theme on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('selectedTheme') || 'pokemon';
+            currentTheme = savedTheme;
+            document.getElementById('themeSelect').value = savedTheme;
+            applyTheme(savedTheme);
+        });
+
         // Expanded Question Bank - 500+ questions
         const questionBank = {
             grade1: [
@@ -988,13 +1320,8 @@
 
             if (isCorrect) {
                 correctAnswers++;
-                const messages = [
-                    '✨ Correct! Your Pokémon grew stronger!',
-                    '🌟 Amazing! You\'re becoming a master!',
-                    '⚡ Excellent work! Keep it up!',
-                    '🎯 Perfect! You got it right!',
-                    '🏆 Outstanding! Great thinking!'
-                ];
+                const theme = themes[currentTheme];
+                const messages = theme.correctMessages;
                 feedback.textContent = messages[Math.floor(Math.random() * messages.length)];
                 feedback.className = 'feedback correct celebrating';
             } else {
@@ -1022,7 +1349,16 @@
         // Confetti Function
         function createConfetti() {
             const container = document.getElementById('confettiContainer');
-            const colors = ['#ffcb05', '#ff6b6b', '#4ecdc4', '#667eea', '#764ba2', '#f093fb', '#45b7d1'];
+            let colors;
+
+            // Theme-specific confetti colors
+            if (currentTheme === 'pokemon') {
+                colors = ['#ffcb05', '#ff6b6b', '#4ecdc4', '#667eea', '#764ba2', '#f093fb', '#45b7d1'];
+            } else if (currentTheme === 'minecraft') {
+                colors = ['#2ecc71', '#3498db', '#9b59b6', '#4a7c59', '#8b5a3c', '#5dade2', '#27ae60'];
+            } else if (currentTheme === 'dogman') {
+                colors = ['#ff6b35', '#f7931e', '#4ecdc4', '#ffe66d', '#ff8c42', '#4ecdc4', '#ffd93d'];
+            }
 
             for (let i = 0; i < 150; i++) {
                 setTimeout(() => {
@@ -1049,88 +1385,45 @@
             document.querySelector('.quiz-screen').classList.remove('active');
             document.querySelector('.results-screen').classList.add('active');
 
+            // Update title to theme-specific completion title
+            document.querySelector('.results-screen h2').textContent = themes[currentTheme].quizCompleteTitle;
+
             document.getElementById('correctCount').textContent = correctAnswers;
             document.getElementById('incorrectCount').textContent = incorrectAnswers;
             document.getElementById('percentageScore').textContent = percentage + '%';
             document.getElementById('calcUsed').textContent = calculatorUsedCount;
             document.getElementById('scoreDisplay').textContent = `You got ${correctAnswers} out of ${totalQuestions} correct!`;
 
-            // Determine grade and Pokemon with realistic card design
-            let grade, gradeClass, pokemon, pokemonEmoji, message, cardClass, type, hp;
+            // Determine grade and reward based on theme
+            const theme = themes[currentTheme];
+            let rewardTier;
 
             if (percentage < 60) {
-                grade = "Keep Training!";
-                gradeClass = "grade-try-again";
-                pokemon = "Magikarp";
-                pokemonEmoji = "🐟";
-                type = "Water Type";
-                hp = "HP 30";
-                message = "Every champion starts somewhere! Keep practicing and you'll evolve into Gyarados!";
-                cardClass = "";
+                rewardTier = theme.rewards.low;
             } else if (percentage < 76) {
-                grade = "Good Effort!";
-                gradeClass = "grade-better";
-                const options = [
-                    {name: "Psyduck", emoji: "🦆", type: "Water Type", hp: "HP 50"},
-                    {name: "Oddish", emoji: "🌱", type: "Grass Type", hp: "HP 45"}
-                ];
-                const chosen = options[Math.floor(Math.random() * options.length)];
-                pokemon = chosen.name;
-                pokemonEmoji = chosen.emoji;
-                type = chosen.type;
-                hp = chosen.hp;
-                message = "Great work! With more practice, you'll be unstoppable!";
-                cardClass = "uncommon";
+                rewardTier = theme.rewards.medium;
             } else if (percentage < 91) {
-                grade = "Excellent Work!";
-                gradeClass = "grade-great";
-                const options = [
-                    {name: "Pikachu", emoji: "⚡", type: "Electric Type", hp: "HP 60"},
-                    {name: "Charmander", emoji: "🔥", type: "Fire Type", hp: "HP 60"},
-                    {name: "Squirtle", emoji: "💧", type: "Water Type", hp: "HP 60"},
-                    {name: "Bulbasaur", emoji: "🌿", type: "Grass Type", hp: "HP 60"}
-                ];
-                const chosen = options[Math.floor(Math.random() * options.length)];
-                pokemon = chosen.name;
-                pokemonEmoji = chosen.emoji;
-                type = chosen.type;
-                hp = chosen.hp;
-                message = "Fantastic! You're showing the skills of a true Pokémon Trainer!";
-                cardClass = "rare";
+                rewardTier = theme.rewards.high;
             } else {
-                grade = "LEGENDARY PERFORMANCE!";
-                gradeClass = "grade-excellent";
-                const legendaries = [
-                    {name: "Mewtwo", emoji: "🧠", type: "Psychic Type", hp: "HP 120"},
-                    {name: "Charizard", emoji: "🔥", type: "Fire/Flying Type", hp: "HP 120"},
-                    {name: "Dragonite", emoji: "🐉", type: "Dragon Type", hp: "HP 130"},
-                    {name: "Lugia", emoji: "🦅", type: "Psychic/Flying Type", hp: "HP 140"},
-                    {name: "Articuno", emoji: "❄️", type: "Ice/Flying Type", hp: "HP 125"},
-                    {name: "Moltres", emoji: "🔥", type: "Fire/Flying Type", hp: "HP 125"}
-                ];
-                const legendary = legendaries[Math.floor(Math.random() * legendaries.length)];
-                pokemon = legendary.name;
-                pokemonEmoji = legendary.emoji;
-                type = legendary.type;
-                hp = legendary.hp;
-                message = "INCREDIBLE! You've achieved Pokémon Master status! 🏆";
-                cardClass = "legendary";
-                createConfetti(); // Trigger confetti for legendary performance
+                rewardTier = theme.rewards.legendary;
             }
+
+            // Select random reward from tier
+            const chosen = rewardTier.options[Math.floor(Math.random() * rewardTier.options.length)];
 
             // Trigger confetti for excellent scores
             if (percentage >= 76) {
                 createConfetti();
             }
 
-            document.getElementById('gradeMessage').textContent = grade;
-            document.getElementById('gradeMessage').className = `grade-message ${gradeClass}`;
-            document.getElementById('pokemonName').textContent = pokemon;
-            document.getElementById('pokemonEmoji').textContent = pokemonEmoji;
-            document.getElementById('pokemonType').textContent = type;
-            document.getElementById('pokemonHP').textContent = hp;
-            document.getElementById('pokemonMessage').textContent = message;
-            document.getElementById('pokemonCard').className = `pokemon-card ${cardClass}`;
+            document.getElementById('gradeMessage').textContent = rewardTier.grade;
+            document.getElementById('gradeMessage').className = `grade-message ${rewardTier.gradeClass}`;
+            document.getElementById('pokemonName').textContent = chosen.name;
+            document.getElementById('pokemonEmoji').textContent = chosen.emoji;
+            document.getElementById('pokemonType').textContent = chosen.type;
+            document.getElementById('pokemonHP').textContent = chosen.hp;
+            document.getElementById('pokemonMessage').textContent = rewardTier.message;
+            document.getElementById('pokemonCard').className = `pokemon-card ${rewardTier.cardClass}`;
         }
 
         // Restart Quiz

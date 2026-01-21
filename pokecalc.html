@@ -28,6 +28,42 @@
             padding: 30px;
             max-width: 600px;
             width: 100%;
+            position: relative;
+        }
+
+        .theme-selector {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
+        }
+
+        .theme-selector label {
+            font-weight: 600;
+            color: #666;
+            margin-right: 8px;
+            font-size: 0.9em;
+        }
+
+        .theme-selector select {
+            padding: 6px 12px;
+            font-size: 0.9em;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .theme-selector select:hover {
+            border-color: #667eea;
+        }
+
+        .theme-selector select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
         }
 
         .header {
@@ -183,13 +219,50 @@
         .emoji {
             font-size: 1.5em;
         }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                padding-top: 70px;
+            }
+
+            .theme-selector {
+                position: relative;
+                top: 0;
+                right: 0;
+                text-align: center;
+                margin-bottom: 15px;
+            }
+
+            .theme-selector label {
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="theme-selector">
+            <label for="themeSelect">Theme:</label>
+            <select id="themeSelect" onchange="changeTheme(this.value)">
+                <option value="pokemon">⚡ Pokémon</option>
+                <option value="minecraft">⛏️ Minecraft</option>
+                <option value="dogman">🦴 Dog Man</option>
+            </select>
+        </div>
+
         <div class="header">
-            <h1>⚡ PokéCalc ⚡</h1>
-            <p>Gotta Calculate 'Em All!</p>
+            <h1 id="mainTitle">⚡ PokéCalc ⚡</h1>
+            <p id="mainSubtitle">Gotta Calculate 'Em All!</p>
         </div>
 
         <div class="display" id="display">0</div>
@@ -233,21 +306,156 @@
     </div>
 
     <script>
+        // Theme Configuration
+        const themes = {
+            pokemon: {
+                name: 'Pokémon',
+                title: '⚡ PokéCalc ⚡',
+                subtitle: 'Gotta Calculate \'Em All!',
+                logTitle: '📖 Trainer Journal',
+                clearLogBtn: '🏥 Clear Log',
+                clearLogMessage: "🏥 Nurse Joy: 'Your Trainer Journal has been refreshed!'",
+                emptyLogMessage: "No battles yet, Trainer! Start calculating!",
+                chooseMove: "Choose your math move!",
+                colors: {
+                    primary: '#667eea',
+                    secondary: '#764ba2',
+                    accent: '#ffcb05',
+                    highlight: '#3d7dca'
+                },
+                gradients: {
+                    body: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    display: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                },
+                messages: {
+                    add: "⚡ Pikachu used Thunder Shock!",
+                    subtract: "🔥 Charmander used Ember!",
+                    multiply: "🧠 Mewtwo used Psychic!",
+                    divide: "💧 Squirtle used Water Gun!",
+                    power: "🔥 Charizard used Fire Blast!",
+                    sqrt: "⭐ Eevee used Swift!",
+                    success: "✨ It's super effective!",
+                    error: "💥 Attack failed!",
+                    clear: "🏥 Nurse Joy healed your calculator!"
+                }
+            },
+            minecraft: {
+                name: 'Minecraft',
+                title: '⛏️ MineCalc ⛏️',
+                subtitle: 'Calculate to Craft!',
+                logTitle: '📜 Crafting Log',
+                clearLogBtn: '🧹 Clear Log',
+                clearLogMessage: "🧹 Steve: 'Your Crafting Log has been cleared!'",
+                emptyLogMessage: "No crafting yet! Start calculating!",
+                chooseMove: "Choose your crafting action!",
+                colors: {
+                    primary: '#4a7c59',
+                    secondary: '#8b5a3c',
+                    accent: '#2ecc71',
+                    highlight: '#3498db'
+                },
+                gradients: {
+                    body: 'linear-gradient(135deg, #4a7c59 0%, #8b5a3c 100%)',
+                    display: 'linear-gradient(135deg, #4a7c59 0%, #2ecc71 100%)'
+                },
+                messages: {
+                    add: "⛏️ You mined some ore!",
+                    subtract: "🪓 You chopped some wood!",
+                    multiply: "⚒️ You crafted items!",
+                    divide: "🔨 You split resources!",
+                    power: "💎 You found diamonds!",
+                    sqrt: "✨ You enchanted an item!",
+                    success: "⭐ Crafting successful!",
+                    error: "💥 Crafting failed!",
+                    clear: "🧹 Steve cleaned your workbench!"
+                }
+            },
+            dogman: {
+                name: 'Dog Man',
+                title: '🦴 Dog Man Calc 🦴',
+                subtitle: 'Paws-itively Accurate!',
+                logTitle: '📓 Police Log',
+                clearLogBtn: '🚨 Clear Log',
+                clearLogMessage: "🚨 Chief: 'Log cleared, get back to work!'",
+                emptyLogMessage: "No cases yet, Deputy! Start calculating!",
+                chooseMove: "Choose your detective move!",
+                colors: {
+                    primary: '#ff6b35',
+                    secondary: '#f7931e',
+                    accent: '#ffe66d',
+                    highlight: '#4ecdc4'
+                },
+                gradients: {
+                    body: 'linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)',
+                    display: 'linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)'
+                },
+                messages: {
+                    add: "🦴 Dog Man found more bones!",
+                    subtract: "🐕 Dog Man chased the bad guys!",
+                    multiply: "🦸 Dog Man multiplied his powers!",
+                    divide: "⚡ Dog Man split the team!",
+                    power: "💪 Dog Man got super strong!",
+                    sqrt: "✨ Dog Man used a super move!",
+                    success: "🏆 Mission successful!",
+                    error: "💥 Uh-oh! Try again!",
+                    clear: "🚨 Chief cleared the case!"
+                }
+            }
+        };
+
+        let currentTheme = 'pokemon';
         let currentDisplay = '0';
         let battleLog = [];
         let lastResult = null;
 
-        const pokemonMessages = {
-            add: "⚡ Pikachu used Thunder Shock!",
-            subtract: "🔥 Charmander used Ember!",
-            multiply: "🧠 Mewtwo used Psychic!",
-            divide: "💧 Squirtle used Water Gun!",
-            power: "🔥 Charizard used Fire Blast!",
-            sqrt: "⭐ Eevee used Swift!",
-            success: "✨ It's super effective!",
-            error: "💥 Attack failed!",
-            clear: "🏥 Nurse Joy healed your calculator!"
-        };
+        // Theme Functions
+        function changeTheme(themeName) {
+            currentTheme = themeName;
+            localStorage.setItem('selectedTheme', themeName);
+            applyTheme(themeName);
+        }
+
+        function applyTheme(themeName) {
+            const theme = themes[themeName];
+
+            // Update title and subtitle
+            document.getElementById('mainTitle').textContent = theme.title;
+            document.getElementById('mainSubtitle').textContent = theme.subtitle;
+
+            // Update colors
+            document.body.style.background = theme.gradients.body;
+
+            // Update display gradient
+            const display = document.getElementById('display');
+            display.style.background = theme.gradients.display;
+
+            // Update log title
+            const logTitle = document.querySelector('.battle-log h3');
+            if (logTitle) {
+                const clearBtn = logTitle.querySelector('.clear-log-btn');
+                logTitle.childNodes[0].textContent = theme.logTitle + ' ';
+                if (clearBtn) {
+                    clearBtn.textContent = theme.clearLogBtn;
+                }
+            }
+
+            // Update message
+            const messageEl = document.getElementById('message');
+            if (messageEl && messageEl.textContent.includes('Choose')) {
+                messageEl.textContent = theme.chooseMove;
+            }
+
+            // Update empty log message if shown
+            updateBattleLog();
+        }
+
+        // Load saved theme on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('selectedTheme') || 'pokemon';
+            currentTheme = savedTheme;
+            document.getElementById('themeSelect').value = savedTheme;
+            applyTheme(savedTheme);
+        });
 
         function updateDisplay() {
             document.getElementById('display').textContent = currentDisplay;
@@ -258,7 +466,8 @@
             messageEl.textContent = message;
             if (duration > 0) {
                 setTimeout(() => {
-                    messageEl.textContent = "Choose your math move!";
+                    const theme = themes[currentTheme];
+                    messageEl.textContent = theme.chooseMove;
                 }, duration);
             }
         }
@@ -280,11 +489,12 @@
                 currentDisplay += op;
             }
 
+            const theme = themes[currentTheme];
             const opMessages = {
-                '+': pokemonMessages.add,
-                '-': pokemonMessages.subtract,
-                '*': pokemonMessages.multiply,
-                '/': pokemonMessages.divide
+                '+': theme.messages.add,
+                '-': theme.messages.subtract,
+                '*': theme.messages.multiply,
+                '/': theme.messages.divide
             };
             showMessage(opMessages[op], 2000);
             updateDisplay();
@@ -303,12 +513,14 @@
                 updateDisplay();
 
                 addToBattleLog(expression + ' = ' + result);
-                showMessage(pokemonMessages.success);
+                const theme = themes[currentTheme];
+                showMessage(theme.messages.success);
                 lastResult = result;
             } catch (error) {
                 currentDisplay = 'Error';
                 updateDisplay();
-                showMessage(pokemonMessages.error + " " + (error.message || "Invalid calculation!"));
+                const theme = themes[currentTheme];
+                showMessage(theme.messages.error + " " + (error.message || "Invalid calculation!"));
                 document.getElementById('display').classList.add('error');
                 setTimeout(() => {
                     document.getElementById('display').classList.remove('error');
@@ -329,9 +541,11 @@
                 updateDisplay();
 
                 addToBattleLog(expression + ' = ' + result);
-                showMessage(pokemonMessages.power + " 🔥 CRITICAL HIT!");
+                const theme = themes[currentTheme];
+                showMessage(theme.messages.power + (currentTheme === 'pokemon' ? " 🔥 CRITICAL HIT!" : ""));
             } catch (error) {
-                showMessage(pokemonMessages.error + " Invalid input!");
+                const theme = themes[currentTheme];
+                showMessage(theme.messages.error + " Invalid input!");
             }
         }
 
@@ -339,7 +553,7 @@
             try {
                 const num = parseFloat(currentDisplay);
                 if (isNaN(num)) throw new Error("Invalid number");
-                if (num < 0) throw new Error("Eevee can't calculate square root of negative numbers!");
+                if (num < 0) throw new Error("Can't calculate square root of negative numbers!");
 
                 const result = Math.sqrt(num);
                 const expression = '√' + num;
@@ -347,16 +561,19 @@
                 updateDisplay();
 
                 addToBattleLog(expression + ' = ' + result);
-                showMessage(pokemonMessages.sqrt);
+                const theme = themes[currentTheme];
+                showMessage(theme.messages.sqrt);
             } catch (error) {
-                showMessage(pokemonMessages.error + " " + error.message);
+                const theme = themes[currentTheme];
+                showMessage(theme.messages.error + " " + error.message);
             }
         }
 
         function clearDisplay() {
             currentDisplay = '0';
             updateDisplay();
-            showMessage(pokemonMessages.clear);
+            const theme = themes[currentTheme];
+            showMessage(theme.messages.clear);
         }
 
         function addToBattleLog(calculation) {
@@ -367,12 +584,15 @@
 
         function updateBattleLog() {
             const logContainer = document.getElementById('battleLog');
+            const theme = themes[currentTheme];
 
             if (battleLog.length === 0) {
-                logContainer.innerHTML = '<div class="battle-log-empty">No battles yet, Trainer! Start calculating!</div>';
+                logContainer.innerHTML = `<div class="battle-log-empty">${theme.emptyLogMessage}</div>`;
             } else {
+                const logLabel = currentTheme === 'pokemon' ? 'Battle' :
+                                currentTheme === 'minecraft' ? 'Craft' : 'Case';
                 logContainer.innerHTML = battleLog.map((log, index) =>
-                    `<div class="battle-log-item">Battle #${battleLog.length - index}: ${log}</div>`
+                    `<div class="battle-log-item">${logLabel} #${battleLog.length - index}: ${log}</div>`
                 ).join('');
             }
         }
@@ -380,7 +600,8 @@
         function clearBattleLog() {
             battleLog = [];
             updateBattleLog();
-            showMessage("🏥 Nurse Joy: 'Your Trainer Journal has been refreshed!'");
+            const theme = themes[currentTheme];
+            showMessage(theme.clearLogMessage);
         }
 
         // Keyboard support
