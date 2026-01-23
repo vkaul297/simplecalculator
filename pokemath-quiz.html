@@ -375,11 +375,44 @@
             padding: 30px;
             text-align: center;
             margin: 30px auto;
-            max-width: 400px;
+            max-width: 450px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3),
                         0 0 0 1px rgba(255,255,255,0.5) inset;
             position: relative;
             overflow: hidden;
+        }
+
+        .reward-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 15px;
+            margin: 20px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: block;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .reward-image:hover {
+            transform: scale(1.05);
+        }
+
+        .image-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .image-link:hover {
+            text-decoration: underline;
         }
 
         .pokemon-card::before {
@@ -729,11 +762,13 @@
 
                 <div class="pokemon-card" id="pokemonCard">
                     <div class="pokemon-hp" id="pokemonHP"></div>
+                    <img id="rewardImage" class="reward-image" style="display: none;" alt="Reward Card">
                     <div class="pokemon-emoji" id="pokemonEmoji"></div>
                     <div class="pokemon-name" id="pokemonName"></div>
                     <div class="pokemon-type" id="pokemonType"></div>
                     <div class="pokemon-stats">
                         <p id="pokemonMessage" style="font-weight: 600; font-size: 1.1em;"></p>
+                        <a id="imageLink" class="image-link" style="display: none;" target="_blank">View Full Card</a>
                     </div>
                 </div>
 
@@ -799,7 +834,7 @@
                         grade: "Keep Training!",
                         gradeClass: "grade-try-again",
                         options: [
-                            {name: "Magikarp", emoji: "🐟", type: "Water Type", hp: "HP 30"}
+                            {name: "Magikarp", emoji: "🐟", type: "Water Type", hp: "HP 30", imageUrl: "https://images.pokemontcg.io/base1/35_hires.png"}
                         ],
                         message: "Every champion starts somewhere! Keep practicing and you'll evolve into Gyarados!",
                         cardClass: ""
@@ -808,8 +843,8 @@
                         grade: "Good Effort!",
                         gradeClass: "grade-better",
                         options: [
-                            {name: "Psyduck", emoji: "🦆", type: "Water Type", hp: "HP 50"},
-                            {name: "Oddish", emoji: "🌱", type: "Grass Type", hp: "HP 45"}
+                            {name: "Psyduck", emoji: "🦆", type: "Water Type", hp: "HP 50", imageUrl: "https://images.pokemontcg.io/base1/54_hires.png"},
+                            {name: "Oddish", emoji: "🌱", type: "Grass Type", hp: "HP 45", imageUrl: "https://images.pokemontcg.io/base1/58_hires.png"}
                         ],
                         message: "Great work! With more practice, you'll be unstoppable!",
                         cardClass: "uncommon"
@@ -818,10 +853,10 @@
                         grade: "Excellent Work!",
                         gradeClass: "grade-great",
                         options: [
-                            {name: "Pikachu", emoji: "⚡", type: "Electric Type", hp: "HP 60"},
-                            {name: "Charmander", emoji: "🔥", type: "Fire Type", hp: "HP 60"},
-                            {name: "Squirtle", emoji: "💧", type: "Water Type", hp: "HP 60"},
-                            {name: "Bulbasaur", emoji: "🌿", type: "Grass Type", hp: "HP 60"}
+                            {name: "Pikachu", emoji: "⚡", type: "Electric Type", hp: "HP 60", imageUrl: "https://images.pokemontcg.io/base1/58_hires.png"},
+                            {name: "Charmander", emoji: "🔥", type: "Fire Type", hp: "HP 60", imageUrl: "https://images.pokemontcg.io/base1/46_hires.png"},
+                            {name: "Squirtle", emoji: "💧", type: "Water Type", hp: "HP 60", imageUrl: "https://images.pokemontcg.io/base1/63_hires.png"},
+                            {name: "Bulbasaur", emoji: "🌿", type: "Grass Type", hp: "HP 60", imageUrl: "https://images.pokemontcg.io/base1/44_hires.png"}
                         ],
                         message: "Fantastic! You're showing the skills of a true Pokémon Trainer!",
                         cardClass: "rare"
@@ -830,12 +865,12 @@
                         grade: "LEGENDARY PERFORMANCE!",
                         gradeClass: "grade-excellent",
                         options: [
-                            {name: "Mewtwo", emoji: "🧠", type: "Psychic Type", hp: "HP 120"},
-                            {name: "Charizard", emoji: "🔥", type: "Fire/Flying Type", hp: "HP 120"},
-                            {name: "Dragonite", emoji: "🐉", type: "Dragon Type", hp: "HP 130"},
-                            {name: "Lugia", emoji: "🦅", type: "Psychic/Flying Type", hp: "HP 140"},
-                            {name: "Articuno", emoji: "❄️", type: "Ice/Flying Type", hp: "HP 125"},
-                            {name: "Moltres", emoji: "🔥", type: "Fire/Flying Type", hp: "HP 125"}
+                            {name: "Mewtwo", emoji: "🧠", type: "Psychic Type", hp: "HP 120", imageUrl: "https://images.pokemontcg.io/base1/10_hires.png"},
+                            {name: "Charizard", emoji: "🔥", type: "Fire/Flying Type", hp: "HP 120", imageUrl: "https://images.pokemontcg.io/base1/4_hires.png"},
+                            {name: "Dragonite", emoji: "🐉", type: "Dragon Type", hp: "HP 130", imageUrl: "https://images.pokemontcg.io/base1/19_hires.png"},
+                            {name: "Lugia", emoji: "🦅", type: "Psychic/Flying Type", hp: "HP 140", imageUrl: "https://images.pokemontcg.io/neo1/9_hires.png"},
+                            {name: "Articuno", emoji: "❄️", type: "Ice/Flying Type", hp: "HP 125", imageUrl: "https://images.pokemontcg.io/base1/2_hires.png"},
+                            {name: "Moltres", emoji: "🔥", type: "Fire/Flying Type", hp: "HP 125", imageUrl: "https://images.pokemontcg.io/base1/12_hires.png"}
                         ],
                         message: "INCREDIBLE! You've achieved Pokémon Master status! 🏆",
                         cardClass: "legendary"
@@ -874,7 +909,7 @@
                         grade: "Keep Mining!",
                         gradeClass: "grade-try-again",
                         options: [
-                            {name: "Wooden Pickaxe", emoji: "🪓", type: "Basic Tool", hp: "Durability 30"}
+                            {name: "Wooden Pickaxe", emoji: "🪓", type: "Basic Tool", hp: "Durability 30", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d0/Wooden_Pickaxe_JE3_BE3.png"}
                         ],
                         message: "Every miner starts with wood! Keep mining to get better tools!",
                         cardClass: ""
@@ -883,8 +918,8 @@
                         grade: "Good Mining!",
                         gradeClass: "grade-better",
                         options: [
-                            {name: "Iron Pickaxe", emoji: "⚒️", type: "Iron Tool", hp: "Durability 50"},
-                            {name: "Iron Sword", emoji: "🗡️", type: "Iron Weapon", hp: "Durability 45"}
+                            {name: "Iron Pickaxe", emoji: "⚒️", type: "Iron Tool", hp: "Durability 50", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d1/Iron_Pickaxe_JE3_BE2.png"},
+                            {name: "Iron Sword", emoji: "🗡️", type: "Iron Weapon", hp: "Durability 45", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/8e/Iron_Sword_JE2_BE2.png"}
                         ],
                         message: "Great work! You're making progress in your mining journey!",
                         cardClass: "uncommon"
@@ -893,10 +928,10 @@
                         grade: "Excellent Mining!",
                         gradeClass: "grade-great",
                         options: [
-                            {name: "Diamond Pickaxe", emoji: "💎", type: "Diamond Tool", hp: "Durability 60"},
-                            {name: "Diamond Sword", emoji: "⚔️", type: "Diamond Weapon", hp: "Durability 60"},
-                            {name: "Enchanted Bow", emoji: "🏹", type: "Ranged Weapon", hp: "Durability 60"},
-                            {name: "Golden Apple", emoji: "🍎", type: "Epic Food", hp: "Hearts +60"}
+                            {name: "Diamond Pickaxe", emoji: "💎", type: "Diamond Tool", hp: "Durability 60", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/87/Diamond_Pickaxe_JE3_BE3.png"},
+                            {name: "Diamond Sword", emoji: "⚔️", type: "Diamond Weapon", hp: "Durability 60", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/21/Diamond_Sword_JE3_BE3.png"},
+                            {name: "Enchanted Bow", emoji: "🏹", type: "Ranged Weapon", hp: "Durability 60", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/ab/Bow_%28Pull_2%29_JE1_BE1.png"},
+                            {name: "Golden Apple", emoji: "🍎", type: "Epic Food", hp: "Hearts +60", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/0/0f/Golden_Apple_JE2_BE2.png"}
                         ],
                         message: "Fantastic! You're showing true mining mastery!",
                         cardClass: "rare"
@@ -905,12 +940,12 @@
                         grade: "LEGENDARY MINER!",
                         gradeClass: "grade-excellent",
                         options: [
-                            {name: "Netherite Pickaxe", emoji: "⛏️", type: "Netherite Tool", hp: "Durability 120"},
-                            {name: "Netherite Sword", emoji: "⚔️", type: "Netherite Weapon", hp: "Durability 120"},
-                            {name: "Elytra", emoji: "🪂", type: "Epic Wings", hp: "Durability 130"},
-                            {name: "Enchanted Trident", emoji: "🔱", type: "Legendary Weapon", hp: "Durability 140"},
-                            {name: "Dragon Egg", emoji: "🥚", type: "Ultra Rare Item", hp: "Priceless"},
-                            {name: "Nether Star", emoji: "⭐", type: "Boss Drop", hp: "Power 125"}
+                            {name: "Netherite Pickaxe", emoji: "⛏️", type: "Netherite Tool", hp: "Durability 120", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c4/Netherite_Pickaxe_JE1_BE1.png"},
+                            {name: "Netherite Sword", emoji: "⚔️", type: "Netherite Weapon", hp: "Durability 120", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/90/Netherite_Sword_JE1_BE1.png"},
+                            {name: "Elytra", emoji: "🪂", type: "Epic Wings", hp: "Durability 130", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/da/Elytra_JE2_BE1.png"},
+                            {name: "Enchanted Trident", emoji: "🔱", type: "Legendary Weapon", hp: "Durability 140", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/71/Trident_JE2_BE2.png"},
+                            {name: "Dragon Egg", emoji: "🥚", type: "Ultra Rare Item", hp: "Priceless", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/38/Dragon_Egg_JE4.png"},
+                            {name: "Nether Star", emoji: "⭐", type: "Boss Drop", hp: "Power 125", imageUrl: "https://static.wikia.nocookie.net/minecraft_gamepedia/images/6/68/Nether_Star_JE3_BE2.png"}
                         ],
                         message: "INCREDIBLE! You've become a Minecraft Legend! 🏆",
                         cardClass: "legendary"
@@ -949,7 +984,7 @@
                         grade: "Keep Training!",
                         gradeClass: "grade-try-again",
                         options: [
-                            {name: "Dog Biscuit", emoji: "🦴", type: "Rookie Snack", hp: "Yum 30"}
+                            {name: "Dog Biscuit", emoji: "🦴", type: "Rookie Snack", hp: "Yum 30", imageUrl: "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=500"}
                         ],
                         message: "Every hero starts somewhere! Keep training and you'll be a super cop!",
                         cardClass: ""
@@ -958,8 +993,8 @@
                         grade: "Good Work!",
                         gradeClass: "grade-better",
                         options: [
-                            {name: "Police Badge", emoji: "🎖️", type: "Officer Badge", hp: "Rank 50"},
-                            {name: "Cop Hat", emoji: "👮", type: "Police Gear", hp: "Cool 45"}
+                            {name: "Police Badge", emoji: "🎖️", type: "Officer Badge", hp: "Rank 50", imageUrl: "https://images.unsplash.com/photo-1535083783855-76ae62b2914e?w=500"},
+                            {name: "Cop Hat", emoji: "👮", type: "Police Gear", hp: "Cool 45", imageUrl: "https://images.unsplash.com/photo-1541006008768-d181e7f7a026?w=500"}
                         ],
                         message: "Great job! Chief is starting to notice your skills!",
                         cardClass: "uncommon"
@@ -968,10 +1003,10 @@
                         grade: "Excellent Work!",
                         gradeClass: "grade-great",
                         options: [
-                            {name: "Dog Man Cape", emoji: "🦸", type: "Hero Cape", hp: "Power 60"},
-                            {name: "Super Bone", emoji: "🦴", type: "Epic Treat", hp: "Energy 60"},
-                            {name: "Chief's Medal", emoji: "🏅", type: "Honor Medal", hp: "Respect 60"},
-                            {name: "Supa Buddy", emoji: "🤖", type: "Robot Friend", hp: "Tech 60"}
+                            {name: "Dog Man Cape", emoji: "🦸", type: "Hero Cape", hp: "Power 60", imageUrl: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=500"},
+                            {name: "Super Bone", emoji: "🦴", type: "Epic Treat", hp: "Energy 60", imageUrl: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=500"},
+                            {name: "Chief's Medal", emoji: "🏅", type: "Honor Medal", hp: "Respect 60", imageUrl: "https://images.unsplash.com/photo-1592498652257-1b5e3758c38e?w=500"},
+                            {name: "Supa Buddy", emoji: "🤖", type: "Robot Friend", hp: "Tech 60", imageUrl: "https://images.unsplash.com/photo-1546776310-eef45dd6d63c?w=500"}
                         ],
                         message: "Fantastic! You're showing true Dog Man heroics!",
                         cardClass: "rare"
@@ -980,12 +1015,12 @@
                         grade: "LEGENDARY HERO!",
                         gradeClass: "grade-excellent",
                         options: [
-                            {name: "Dog Man Suit", emoji: "🦸‍♂️", type: "Ultimate Hero", hp: "Power 120"},
-                            {name: "Flip-O-Rama", emoji: "📖", type: "Special Move", hp: "Epic 120"},
-                            {name: "Li'l Petey", emoji: "😺", type: "Best Friend", hp: "Friendship 130"},
-                            {name: "80-HD", emoji: "🤖", type: "Super Robot", hp: "Tech 140"},
-                            {name: "Cat Kid", emoji: "🐱", type: "Hero Sidekick", hp: "Awesome 125"},
-                            {name: "Supa Jet", emoji: "🚀", type: "Flying Vehicle", hp: "Speed 125"}
+                            {name: "Dog Man Suit", emoji: "🦸‍♂️", type: "Ultimate Hero", hp: "Power 120", imageUrl: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=500"},
+                            {name: "Flip-O-Rama", emoji: "📖", type: "Special Move", hp: "Epic 120", imageUrl: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500"},
+                            {name: "Li'l Petey", emoji: "😺", type: "Best Friend", hp: "Friendship 130", imageUrl: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500"},
+                            {name: "80-HD", emoji: "🤖", type: "Super Robot", hp: "Tech 140", imageUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=500"},
+                            {name: "Cat Kid", emoji: "🐱", type: "Hero Sidekick", hp: "Awesome 125", imageUrl: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=500"},
+                            {name: "Supa Jet", emoji: "🚀", type: "Flying Vehicle", hp: "Speed 125", imageUrl: "https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?w=500"}
                         ],
                         message: "INCREDIBLE! You're a Dog Man Super Hero! 🏆",
                         cardClass: "legendary"
@@ -1001,6 +1036,8 @@
             currentTheme = themeName;
             localStorage.setItem('selectedTheme', themeName);
             applyTheme(themeName);
+            // Preload images for new theme
+            setTimeout(() => preloadThemeImages(themeName), 500);
         }
 
         function applyTheme(themeName) {
@@ -1032,12 +1069,37 @@
             if (gradeLabel) gradeLabel.textContent = theme.gradeLabel;
         }
 
+        // Preload images for current theme
+        function preloadThemeImages(themeName) {
+            const theme = themes[themeName];
+            const imageUrls = [];
+
+            // Collect all image URLs from theme rewards
+            Object.keys(theme.rewards).forEach(tier => {
+                theme.rewards[tier].options.forEach(option => {
+                    if (option.imageUrl && !getCachedImage(option.imageUrl)) {
+                        imageUrls.push(option.imageUrl);
+                    }
+                });
+            });
+
+            // Preload images in background (limit to 5 at a time to avoid overwhelming)
+            imageUrls.slice(0, 5).forEach((url, index) => {
+                setTimeout(() => {
+                    loadRewardImage(url, () => {}, () => {});
+                }, index * 500); // Stagger requests
+            });
+        }
+
         // Load saved theme on page load
         window.addEventListener('DOMContentLoaded', function() {
             const savedTheme = localStorage.getItem('selectedTheme') || 'pokemon';
             currentTheme = savedTheme;
             document.getElementById('themeSelect').value = savedTheme;
             applyTheme(savedTheme);
+
+            // Preload images for current theme
+            setTimeout(() => preloadThemeImages(savedTheme), 1000);
         });
 
         // Expanded Question Bank - 500+ questions
@@ -1346,6 +1408,82 @@
             showQuestion();
         }
 
+        // Image Caching Functions
+        function getCachedImage(imageUrl) {
+            try {
+                const cached = localStorage.getItem(`img_cache_${imageUrl}`);
+                if (cached) {
+                    return cached;
+                }
+            } catch (e) {
+                console.log('localStorage read error:', e);
+            }
+            return null;
+        }
+
+        function cacheImage(imageUrl, dataUrl) {
+            try {
+                localStorage.setItem(`img_cache_${imageUrl}`, dataUrl);
+            } catch (e) {
+                console.log('localStorage write error (cache full?):', e);
+                // If storage is full, clear old image caches
+                clearOldImageCaches();
+                try {
+                    localStorage.setItem(`img_cache_${imageUrl}`, dataUrl);
+                } catch (e2) {
+                    console.log('Still cannot cache image:', e2);
+                }
+            }
+        }
+
+        function clearOldImageCaches() {
+            try {
+                const keys = Object.keys(localStorage);
+                const imageCacheKeys = keys.filter(key => key.startsWith('img_cache_'));
+                // Remove oldest 50% of cached images
+                const toRemove = imageCacheKeys.slice(0, Math.floor(imageCacheKeys.length / 2));
+                toRemove.forEach(key => localStorage.removeItem(key));
+            } catch (e) {
+                console.log('Error clearing cache:', e);
+            }
+        }
+
+        function loadRewardImage(imageUrl, onSuccess, onError) {
+            // First check cache
+            const cached = getCachedImage(imageUrl);
+            if (cached) {
+                onSuccess(cached);
+                return;
+            }
+
+            // If not cached, load the image
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+
+            img.onload = function() {
+                try {
+                    // Convert to base64 and cache
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    const dataUrl = canvas.toDataURL('image/png');
+                    cacheImage(imageUrl, dataUrl);
+                    onSuccess(dataUrl);
+                } catch (e) {
+                    // CORS or other error, just use the URL directly
+                    onSuccess(imageUrl);
+                }
+            };
+
+            img.onerror = function() {
+                onError();
+            };
+
+            img.src = imageUrl;
+        }
+
         // Confetti Function
         function createConfetti() {
             const container = document.getElementById('confettiContainer');
@@ -1419,11 +1557,43 @@
             document.getElementById('gradeMessage').textContent = rewardTier.grade;
             document.getElementById('gradeMessage').className = `grade-message ${rewardTier.gradeClass}`;
             document.getElementById('pokemonName').textContent = chosen.name;
-            document.getElementById('pokemonEmoji').textContent = chosen.emoji;
             document.getElementById('pokemonType').textContent = chosen.type;
             document.getElementById('pokemonHP').textContent = chosen.hp;
             document.getElementById('pokemonMessage').textContent = rewardTier.message;
             document.getElementById('pokemonCard').className = `pokemon-card ${rewardTier.cardClass}`;
+
+            // Load reward image if available
+            const rewardImageEl = document.getElementById('rewardImage');
+            const emojiEl = document.getElementById('pokemonEmoji');
+            const imageLinkEl = document.getElementById('imageLink');
+
+            if (chosen.imageUrl) {
+                // Try to load the image
+                loadRewardImage(
+                    chosen.imageUrl,
+                    function(imageData) {
+                        // Success - show image, hide emoji
+                        rewardImageEl.src = imageData;
+                        rewardImageEl.style.display = 'block';
+                        emojiEl.style.display = 'none';
+                        imageLinkEl.href = chosen.imageUrl;
+                        imageLinkEl.style.display = 'inline-block';
+                    },
+                    function() {
+                        // Error - fall back to emoji
+                        rewardImageEl.style.display = 'none';
+                        emojiEl.style.display = 'block';
+                        emojiEl.textContent = chosen.emoji;
+                        imageLinkEl.style.display = 'none';
+                    }
+                );
+            } else {
+                // No image URL, use emoji
+                rewardImageEl.style.display = 'none';
+                emojiEl.style.display = 'block';
+                emojiEl.textContent = chosen.emoji;
+                imageLinkEl.style.display = 'none';
+            }
         }
 
         // Restart Quiz
